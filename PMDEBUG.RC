@@ -1,0 +1,27 @@
+#define INCL_GPI
+#define INCL_WIN
+#include "os2.h"
+#define FKEY 0x9F
+
+resource 300 0x234 pmdebug.cic
+
+ACCELTABLE  0x234  preload
+{
+   VK_F10, FKEY+10, VIRTUALKEY
+   VK_F1,  FKEY+1,  VIRTUALKEY
+}
+
+menu 0x234 
+{
+   submenu "~Setup",-1
+   {
+      menuitem "E~xit", FKEY+3
+      menuitem "~Clear", 0x43
+/*       menuitem "~Small font", 0x53 */
+/*       menuitem "~Large font", 0x4C */
+      menuitem  "~Logging", 0x4C
+      menuitem  "~Flush  ", 0x46
+      menuitem  "~Delete logfile", 0x44
+   }
+   menuitem  "F1=Help",    0xA0, MIS_BUTTONSEPARATOR,0
+}

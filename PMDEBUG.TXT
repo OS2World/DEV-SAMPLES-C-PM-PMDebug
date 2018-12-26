@@ -1,0 +1,70 @@
+PMDEBUG
+-------
+
+PMDEBUG is a program which collects queue input and writes it to its main 
+window on a TTY style basis. The program is a PM program, but the collection 
+of queue messages is not PM dependant, so logging much debug information 
+won't block the message passing within the PM. The program has two functions:
+
+debug_puts(char *txt)
+
+A function like puts() to stdout, just puts TTY like output to the PMDEBUG 
+window, which acts as stdout. This function can be used by any OS/2 program, 
+PM or non-PM.
+In the TEST.C sample program is an example in which printf() is to be 
+rerouted to the PMDEBUG window. This also works under non-PM programs.
+
+debug_logmessage(HWND hwnd, USHORT msg, MPARAM mp1, MPARAM mp2, char far *txt)
+
+This function is useful to examine which messages there are actually passing 
+to your PM program. The TXT parameter can just be used for comment.
+
+These functions just use DosOpenQueue() and when this function fails (PMDEBUG 
+is not loaded) it returns immediately to the caller.
+Otherwise it creates a shared memory segment available to the server 
+(PMDEBUG) and performs DosWriteQueue(). This is considerably less 
+time-consuming than message passing by WinSendMsg() and is available to
+non-PM programs too. PMDEBUG performs a DosReadQueue() with wait in a
+separate thread, so its window procedure only repaints and waits for 
+keyboard/mouse input.
+The entire screen is saved in a buffer, so maximizing the window will show 
+the last page.
+PMDEBUG also logs all incoming text to a file called LO. The filename can be 
+changed.
+Keyboard Input :
+
+d   deletes the current log file.
+l   turns loggin off and on, when turned on, output will be appended to the
+    current log file.
+F1 or ?
+    shows a little help box
+F3 or Ctrl-C 
+    exits PMDEBUG.
+
+Command line switches:
+
+PMDEBUG -1 loads small (6x8 pixels) font.
+PMDEBUG -f <file> logs to <file> rather than LO.
+
+The file SEEFONTS.DLL provides two fonts because the fonts provided with PM 
+are too large to get much information on a 'normal' VGA screen and are only 
+useful on a 800x600 or higher resolution screen.
+
+The routine PMDEBFUN.C contains code which you should add to your program to 
+enable debug output to the PMDEBUG window. The program TEST is a sample PM
+program which printf-s to PMDEBUG.
+
+Another feature of PMDEBUG:
+It uses a color icon instead of a normal monochrome PM icon in OS/2 1.1. The
+code for it is in PMDEBUG.C.
+
+PMDEBUG is made by:
+Klaas van Ditzhuyzen (colleague of MARTIN VERMEER (# /839)
+DATAD Telecomm Products
+P.O. Box 371
+Veenendaal Holland 
++31 8385 33400
+
+For suggestions (or bugs):
+Contact MARTIN VERMEER (/839 ) on MAGNUM BBS:
+ (805) 581-1275
